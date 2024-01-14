@@ -468,7 +468,6 @@ public class BibliotheekApp {
 
     private static void voegCategorieToe(CategorieDAO categorieDAO) {
         System.out.print("Naam van de categorie: ");
-        scanner.nextLine(); // Consume newline left-over
         String naam = scanner.nextLine();
         Categorie categorie = new Categorie(naam);
         categorieDAO.saveCategorie(categorie);
