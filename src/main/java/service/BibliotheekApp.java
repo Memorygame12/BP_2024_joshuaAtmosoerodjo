@@ -93,17 +93,19 @@ public class BibliotheekApp {
     }
 
     private static void voegLidToe() {
+        try {
+            System.out.print("Naam: ");
+            String naam = scanner.next();
+            System.out.print("Adres: ");
+            String adres = scanner.next();
+            System.out.print("Telefoonnummer: ");
+            String telefoonnummer = scanner.next();
 
-
-        System.out.print("Naam: ");
-        String naam = scanner.next();
-        System.out.print("Adres: ");
-        String adres = scanner.next();
-        System.out.print("Telefoonnummer: ");
-        String telefoonnummer = scanner.next();
-
-        Lid nieuwLid = new Lid(naam, adres, telefoonnummer);
-        lidService.addLid(nieuwLid);
+            Lid nieuwLid = new Lid(naam, adres, telefoonnummer);
+            lidService.addLid(nieuwLid);
+        } catch (Exception e) {
+            System.out.println("Er is een fout opgetreden: " + e.getMessage());
+        }
     }
 
     private static void updateLid() {
@@ -192,10 +194,13 @@ public class BibliotheekApp {
         String auteur = scanner.nextLine();
         System.out.print("Genre: ");
         String genre = scanner.nextLine();
+        System.out.print("Aantal exemplaren: ");
+        int aantal = scanner.nextInt(); // Voeg deze regel toe om het aantal te vragen
 
-        Boek nieuwBoek = new Boek(titel, auteur, genre);
+        Boek nieuwBoek = new Boek(titel, auteur, genre, aantal); // Gebruik 'aantal' hier
         boekService.addBoek(nieuwBoek);
 
+        scanner.nextLine(); // Consume the leftover newline na het lezen van een int
         System.out.print("Beschrijving: ");
         String beschrijving = scanner.nextLine();
         BoekDetails boekDetails = new BoekDetails(beschrijving, nieuwBoek);
@@ -209,17 +214,21 @@ public class BibliotheekApp {
     private static void updateBoek() {
         System.out.print("Boek ID: ");
         int id = scanner.nextInt();
+        scanner.nextLine(); // Consume the leftover newline
         System.out.print("Nieuwe titel: ");
-        String titel = scanner.next();
+        String titel = scanner.nextLine();
         System.out.print("Nieuwe auteur: ");
-        String auteur = scanner.next();
+        String auteur = scanner.nextLine();
         System.out.print("Nieuw genre: ");
-        String genre = scanner.next();
+        String genre = scanner.nextLine();
+        System.out.print("Nieuw aantal exemplaren: ");
+        int aantal = scanner.nextInt(); // Vraag naar het nieuwe aantal
 
-        Boek boek = new Boek(titel, auteur, genre);
+        Boek boek = new Boek(titel, auteur, genre, aantal);
         boek.setId(id);
-        boekService.updateBoek(boek); // Gebruik boekService in plaats van boekDAO
+        boekService.updateBoek(boek);
     }
+
 
 
     private static void verwijderBoek() {
@@ -230,6 +239,7 @@ public class BibliotheekApp {
 
 
     private static void zoekBoek() {
+        try{
         System.out.print("Boek ID: ");
         int id = scanner.nextInt();
         Boek boek = boekService.getBoek(id);
@@ -243,6 +253,9 @@ public class BibliotheekApp {
             }
         } else {
             System.out.println("Boek niet gevonden.");
+        }
+        } catch (Exception e) {
+            System.out.println("Er is een fout opgetreden: " + e.getMessage());
         }
     }
 
@@ -287,6 +300,19 @@ public class BibliotheekApp {
             System.out.println("Boek uitgeleend.");
         } else {
             System.out.println("Boek of lid niet gevonden, of boek is niet beschikbaar.");
+        }
+
+        if (boek != null && boek.getAantal() > 0) {
+            // Verminder de voorraad
+            boek.setAantal(boek.getAantal() - 1);
+            boekService.updateBoek(boek);
+
+            // Creëer en sla de uitlening op
+            Uitlening nieuweUitlening = new Uitlening(lid, boek, new Date());
+            uitleningService.addUitlening(nieuweUitlening);
+            System.out.println("Boek uitgeleend.");
+        } else {
+            System.out.println("Boek is niet beschikbaar.");
         }
     }
 
