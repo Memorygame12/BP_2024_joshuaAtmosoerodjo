@@ -20,80 +20,96 @@ public class BibliotheekApp {
     private static BoekDetailsDAO boekDetailsDAO = new BoekDetailsDAO(emf);
 
     public static void main(String[] args) {
-
         while (true) {
-            System.out.println("Welkom bij de Bibliotheek Beheer Applicatie");
-            System.out.println("1. Leden beheren");
-            System.out.println("2. Boeken beheren");
-            System.out.println("3. Uitleningen beheren");
-            System.out.println("4. Rapporten genereren");
-            System.out.println("5. Categorieën beheren");
-            System.out.println("6. Afsluiten");
+            try {
+                System.out.println("Welkom bij de Bibliotheek Beheer Applicatie");
+                System.out.println("1. Leden beheren");
+                System.out.println("2. Boeken beheren");
+                System.out.println("3. Uitleningen beheren");
+                System.out.println("4. Rapporten genereren");
+                System.out.println("5. Categorieën beheren");
+                System.out.println("6. Afsluiten");
 
-            System.out.print("Kies een optie: ");
-            int keuze = scanner.nextInt();
+                System.out.print("Kies een optie: ");
+                int keuze = Integer.parseInt(scanner.nextLine());
 
-            switch (keuze) {
-                case 1:
-                    beheerLeden();
-                    break;
-                case 2:
-                    beheerBoeken();
-                    break;
-                case 3:
-                    beheerUitleningen();
-                    break;
-                case 4:
-                    genereerRapporten();
-                    break;
-                case 5:
-                    beheerCategorieen();
-                    break;
-                case 6:
-                    System.out.println("Applicatie afsluiten...");
-                    System.exit(0);
-                    break;
-                default:
-                    System.out.println("Ongeldige keuze, probeer opnieuw.");
+                switch (keuze) {
+                    case 1:
+                        beheerLeden();
+                        break;
+                    case 2:
+                        beheerBoeken();
+                        break;
+                    case 3:
+                        beheerUitleningen();
+                        break;
+                    case 4:
+                        genereerRapporten();
+                        break;
+                    case 5:
+                        beheerCategorieen();
+                        break;
+                    case 6:
+                        System.out.println("Applicatie afsluiten...");
+                        System.exit(0);
+                        break;
+                    default:
+                        System.out.println("Ongeldige keuze, probeer opnieuw.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Voer alstublieft een geldig nummer in.");
+            } catch (Exception e) {
+                System.out.println("Er is een fout opgetreden: " + e.getMessage());
             }
         }
     }
+
 
     private static void beheerLeden() {
         while (true) {
-            System.out.println("\nLeden Beheer:");
-            System.out.println("1. Lid toevoegen");
-            System.out.println("2. Lid bijwerken");
-            System.out.println("3. Lid verwijderen");
-            System.out.println("4. Lid zoeken");
-            System.out.println("5. Terug naar hoofdmenu");
+            try {
+                System.out.println("\nLeden Beheer:");
+                System.out.println("1. Lid toevoegen");
+                System.out.println("2. Lid bijwerken");
+                System.out.println("3. Lid verwijderen");
+                System.out.println("4. Lid zoeken");
+                System.out.println("5. Terug naar hoofdmenu");
 
-            System.out.print("Kies een optie: ");
-            int keuze = scanner.nextInt();
+                System.out.print("Kies een optie: ");
+                int keuze = Integer.parseInt(scanner.nextLine());
 
-            switch (keuze) {
-                case 1:
-                    voegLidToe();
-                    break;
-                case 2:
-                    updateLid();
-                    break;
-                case 3:
-                    verwijderLid();
-                    break;
-                case 4:
-                    zoekLid();
-                    break;
-                case 5:
-                    return;
-                default:
-                    System.out.println("Ongeldige keuze, probeer opnieuw.");
+                switch (keuze) {
+                    case 1:
+                        voegLidToe();
+                        break;
+                    case 2:
+                        updateLid();
+                        break;
+                    case 3:
+                        verwijderLid();
+                        break;
+                    case 4:
+                        zoekLid();
+                        break;
+                    case 5:
+                        return; // Gaat terug naar het hoofdmenu
+                    default:
+                        System.out.println("Ongeldige keuze, probeer opnieuw.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Voer alstublieft een geldig nummer in.");
+            } catch (Exception e) {
+                System.out.println("Er is een fout opgetreden: " + e.getMessage());
+                // Optioneel kunt u hier besluiten om ook terug te gaan naar het hoofdmenu
+                // door bijvoorbeeld 'return;' toe te voegen als u niet wilt dat het huidige menu herhaald wordt na een algemene uitzondering.
             }
         }
     }
 
+
+
     private static void voegLidToe() {
-        try {
+
             System.out.print("Naam: ");
             String naam = scanner.next();
             System.out.print("Adres: ");
@@ -103,10 +119,8 @@ public class BibliotheekApp {
 
             Lid nieuwLid = new Lid(naam, adres, telefoonnummer);
             lidService.addLid(nieuwLid);
-        } catch (Exception e) {
-            System.out.println("Er is een fout opgetreden: " + e.getMessage());
         }
-    }
+
 
     private static void updateLid() {
         System.out.print("Lid ID: ");
@@ -155,36 +169,43 @@ public class BibliotheekApp {
 
     private static void beheerBoeken() {
         while (true) {
-            System.out.println("\nBoeken Beheer:");
-            System.out.println("1. Boek toevoegen");
-            System.out.println("2. Boek bijwerken");
-            System.out.println("3. Boek verwijderen");
-            System.out.println("4. Boek zoeken");
-            System.out.println("5. Terug naar hoofdmenu");
+            try {
+                System.out.println("\nBoeken Beheer:");
+                System.out.println("1. Boek toevoegen");
+                System.out.println("2. Boek bijwerken");
+                System.out.println("3. Boek verwijderen");
+                System.out.println("4. Boek zoeken");
+                System.out.println("5. Terug naar hoofdmenu");
 
-            System.out.print("Kies een optie: ");
-            int keuze = scanner.nextInt();
+                System.out.print("Kies een optie: ");
+                int keuze = Integer.parseInt(scanner.nextLine());
 
-            switch (keuze) {
-                case 1:
-                    voegBoekToe();
-                    break;
-                case 2:
-                    updateBoek();
-                    break;
-                case 3:
-                    verwijderBoek();
-                    break;
-                case 4:
-                    zoekBoek();
-                    break;
-                case 5:
-                    return;
-                default:
-                    System.out.println("Ongeldige keuze, probeer opnieuw.");
+                switch (keuze) {
+                    case 1:
+                        voegBoekToe();
+                        break;
+                    case 2:
+                        updateBoek();
+                        break;
+                    case 3:
+                        verwijderBoek();
+                        break;
+                    case 4:
+                        zoekBoek();
+                        break;
+                    case 5:
+                        return;
+                    default:
+                        System.out.println("Ongeldige keuze, probeer opnieuw.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Voer alstublieft een geldig nummer in.");
+            } catch (Exception e) {
+                System.out.println("Er is een fout opgetreden: " + e.getMessage());
             }
         }
     }
+
 
     private static void voegBoekToe() {
         System.out.print("Titel: ");
@@ -262,28 +283,35 @@ public class BibliotheekApp {
 
     private static void beheerUitleningen() {
         while (true) {
-            System.out.println("\nUitleningen Beheer:");
-            System.out.println("1. Boek uitlenen");
-            System.out.println("2. Boek terugbrengen");
-            System.out.println("3. Terug naar hoofdmenu");
+            try {
+                System.out.println("\nUitleningen Beheer:");
+                System.out.println("1. Boek uitlenen");
+                System.out.println("2. Boek terugbrengen");
+                System.out.println("3. Terug naar hoofdmenu");
 
-            System.out.print("Kies een optie: ");
-            int keuze = scanner.nextInt();
+                System.out.print("Kies een optie: ");
+                int keuze = Integer.parseInt(scanner.nextLine());
 
-            switch (keuze) {
-                case 1:
-                    leenBoekUit();
-                    break;
-                case 2:
-                    brengBoekTerug();
-                    break;
-                case 3:
-                    return;
-                default:
-                    System.out.println("Ongeldige keuze, probeer opnieuw.");
+                switch (keuze) {
+                    case 1:
+                        leenBoekUit();
+                        break;
+                    case 2:
+                        brengBoekTerug();
+                        break;
+                    case 3:
+                        return;
+                    default:
+                        System.out.println("Ongeldige keuze, probeer opnieuw.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Voer alstublieft een geldig nummer in.");
+            } catch (Exception e) {
+                System.out.println("Er is een fout opgetreden: " + e.getMessage());
             }
         }
     }
+
 
     private static void leenBoekUit() {
         System.out.print("Lid ID: ");
@@ -332,28 +360,35 @@ public class BibliotheekApp {
 
     private static void genereerRapporten() {
         while (true) {
-            System.out.println("\nRapporten Genereren:");
-            System.out.println("1. Rapport van uitgeleende boeken");
-            System.out.println("2. Rapport van late retouren");
-            System.out.println("3. Terug naar hoofdmenu");
+            try {
+                System.out.println("\nRapporten Genereren:");
+                System.out.println("1. Rapport van uitgeleende boeken");
+                System.out.println("2. Rapport van late retouren");
+                System.out.println("3. Terug naar hoofdmenu");
 
-            System.out.print("Kies een optie: ");
-            int keuze = scanner.nextInt();
+                System.out.print("Kies een optie: ");
+                int keuze = Integer.parseInt(scanner.nextLine());
 
-            switch (keuze) {
-                case 1:
-                    genereerUitgeleendeBoekenRapport();
-                    break;
-                case 2:
-                    genereerLateRetourenRapport();
-                    break;
-                case 3:
-                    return;
-                default:
-                    System.out.println("Ongeldige keuze, probeer opnieuw.");
+                switch (keuze) {
+                    case 1:
+                        genereerUitgeleendeBoekenRapport();
+                        break;
+                    case 2:
+                        genereerLateRetourenRapport();
+                        break;
+                    case 3:
+                        return;
+                    default:
+                        System.out.println("Ongeldige keuze, probeer opnieuw.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Voer alstublieft een geldig nummer in.");
+            } catch (Exception e) {
+                System.out.println("Er is een fout opgetreden: " + e.getMessage());
             }
         }
     }
+
 
     private static void genereerUitgeleendeBoekenRapport() {
         List<Uitlening> uitleningen = uitleningService.getAllUitleningen();
@@ -389,41 +424,47 @@ public class BibliotheekApp {
         CategorieDAO categorieDAO = new CategorieDAO(emf);
 
         while (true) {
-            System.out.println("\nCategorie Beheer:");
-            System.out.println("1. Categorie toevoegen");
-            System.out.println("2. Categorieën weergeven");
-            System.out.println("3. Categorie bijwerken");
-            System.out.println("4. Categorie verwijderen");
-            System.out.println("5. Zoek Categorie");
-            System.out.println("6. Terug naar hoofdmenu");
+            try {
+                System.out.println("\nCategorie Beheer:");
+                System.out.println("1. Categorie toevoegen");
+                System.out.println("2. Categorieën weergeven");
+                System.out.println("3. Categorie bijwerken");
+                System.out.println("4. Categorie verwijderen");
+                System.out.println("5. Zoek Categorie");
+                System.out.println("6. Terug naar hoofdmenu");
 
+                System.out.print("Kies een optie: ");
+                int keuze = Integer.parseInt(scanner.nextLine());
 
-            System.out.print("Kies een optie: ");
-            int keuze = scanner.nextInt();
-
-            switch (keuze) {
-                case 1:
-                    voegCategorieToe(categorieDAO);
-                    break;
-                case 2:
-                    toonCategorieen(categorieDAO);
-                    break;
-                case 3:
-                    updateCategorie(categorieDAO);
-                    break;
-                case 4:
-                    verwijderCategorie(categorieDAO);
-                    break;
-                case 5:
-                    zoekCategorie();
-                    break;
-                case 6:
-                    return;
-                default:
-                    System.out.println("Ongeldige keuze, probeer opnieuw.");
+                switch (keuze) {
+                    case 1:
+                        voegCategorieToe(categorieDAO);
+                        break;
+                    case 2:
+                        toonCategorieen(categorieDAO);
+                        break;
+                    case 3:
+                        updateCategorie(categorieDAO);
+                        break;
+                    case 4:
+                        verwijderCategorie(categorieDAO);
+                        break;
+                    case 5:
+                        zoekCategorie();
+                        break;
+                    case 6:
+                        return;
+                    default:
+                        System.out.println("Ongeldige keuze, probeer opnieuw.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Voer alstublieft een geldig nummer in.");
+            } catch (Exception e) {
+                System.out.println("Er is een fout opgetreden: " + e.getMessage());
             }
         }
     }
+
 
     private static void voegCategorieToe(CategorieDAO categorieDAO) {
         System.out.print("Naam van de categorie: ");
