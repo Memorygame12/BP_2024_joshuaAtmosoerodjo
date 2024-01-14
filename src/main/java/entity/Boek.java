@@ -37,6 +37,9 @@ public class Boek {
     @ManyToMany(mappedBy = "boeken")
     private Set<Categorie> categorieen;
 
+//    @ManyToMany(mappedBy = "boeken", cascade =  CascadeType.PERSIST, fetch = FetchType.EAGER )
+//    private Set<Categorie> categorieen;
+
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
     public String getTitel() { return titel; }

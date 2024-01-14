@@ -21,7 +21,15 @@ public class Categorie {
     @Column(name = "naam")
     private String naam;
 
-    @ManyToMany
+//    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+//    @JoinTable(
+//            name = "boek_categorie",
+//            joinColumns = @JoinColumn(name = "categorie_id"),
+//            inverseJoinColumns = @JoinColumn(name = "boek_id")
+//    )
+//    private Set<Boek> boeken;
+
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     @JoinTable(
             name = "boek_categorie",
             joinColumns = @JoinColumn(name = "categorie_id"),

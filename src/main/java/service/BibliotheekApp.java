@@ -358,7 +358,7 @@ public class BibliotheekApp {
 
 
 
-                private static void beheerUitleningen() {
+    private static void beheerUitleningen() {
         while (true) {
             try {
                 System.out.println("\nUitleningen Beheer:");
