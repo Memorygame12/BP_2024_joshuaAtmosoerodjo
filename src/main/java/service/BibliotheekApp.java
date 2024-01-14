@@ -4,7 +4,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
-
+import java.util.Set;
+import java.util.HashSet;
 import configuration.JPAConfiguration;
 import entity.*;
 import jakarta.persistence.EntityManagerFactory;
@@ -210,26 +211,50 @@ public class BibliotheekApp {
     private static void voegBoekToe() {
         System.out.print("Titel: ");
         scanner.nextLine(); // Consume the leftover newline
+
         String titel = scanner.nextLine();
         System.out.print("Auteur: ");
         String auteur = scanner.nextLine();
         System.out.print("Genre: ");
         String genre = scanner.nextLine();
-        System.out.print("Aantal exemplaren: ");
-        int aantal = scanner.nextInt(); // Voeg deze regel toe om het aantal te vragen
 
-        Boek nieuwBoek = new Boek(titel, auteur, genre, aantal); // Gebruik 'aantal' hier
+
+// Toon beschikbare categorieën
+        List<Categorie> alleCategorieen = categorieDAO.getAllCategorieen();
+        for (Categorie c : alleCategorieen) {
+            System.out.println("Categorie ID: " + c.getId() + ", Naam: " + c.getNaam());
+        }
+
+// Laat de gebruiker categorieën kiezen
+        System.out.print("Selecteer categorieën (IDs gescheiden door komma's): ");
+        String[] gekozenCategorieIds = scanner.nextLine().split(",");
+        Set<Categorie> geselecteerdeCategorieen = new HashSet<>();
+        for (String idString : gekozenCategorieIds) {
+            int id = Integer.parseInt(idString.trim());
+            Categorie categorie = categorieDAO.getCategorie(id);
+            if (categorie != null) {
+                geselecteerdeCategorieen.add(categorie);
+            } else {
+                System.out.println("Categorie met ID " + id + " bestaat niet.");
+            }
+        }
+
+        System.out.print("Aantal exemplaren: ");
+        int aantal = scanner.nextInt();
+        scanner.nextLine(); // Consume the leftover newline
+
+        Boek nieuwBoek = new Boek(titel, auteur, genre, aantal);
+        nieuwBoek.setCategorieen(geselecteerdeCategorieen);
         boekService.addBoek(nieuwBoek);
 
-        scanner.nextLine(); // Consume the leftover newline na het lezen van een int
         System.out.print("Beschrijving: ");
         String beschrijving = scanner.nextLine();
         BoekDetails boekDetails = new BoekDetails(beschrijving, nieuwBoek);
-
         boekDetailsDAO.saveBoekDetails(boekDetails);
 
-        System.out.println("Boek '" + titel + "' is succesvol toegevoegd met details.");
+        System.out.println("Boek '" + titel + "' succesvol toegevoegd met details en categorieën.");
     }
+
 
 
     private static void updateBoek() {
