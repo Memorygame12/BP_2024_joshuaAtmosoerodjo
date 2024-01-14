@@ -110,61 +110,79 @@ public class BibliotheekApp {
 
 
     private static void voegLidToe() {
-
+        try {
             System.out.print("Naam: ");
-            String naam = scanner.next();
+            String naam = scanner.nextLine
+                    (); // Gebruik nextLine() voor consistente input handling
             System.out.print("Adres: ");
-            String adres = scanner.next();
+            String adres = scanner.nextLine();
             System.out.print("Telefoonnummer: ");
-            String telefoonnummer = scanner.next();
+            String telefoonnummer = scanner.nextLine();
+
 
             Lid nieuwLid = new Lid(naam, adres, telefoonnummer);
             lidService.addLid(nieuwLid);
+        } catch (Exception e) {
+            System.out.println("Er is een fout opgetreden: " + e.getMessage());
         }
+    }
 
 
     private static void updateLid() {
-        System.out.print("Lid ID: ");
-        int id = scanner.nextInt();
-        System.out.print("Nieuwe naam: ");
-        String naam = scanner.next();
-        System.out.print("Nieuw adres: ");
-        String adres = scanner.next();
-        System.out.print("Nieuw telefoonnummer: ");
-        String telefoonnummer = scanner.next();
+        try {
+            System.out.print("Lid ID: ");
+            int id = Integer.parseInt(scanner.nextLine());
+            System.out.print("Nieuwe naam: ");
+            String naam = scanner.nextLine();
+            System.out.print("Nieuw adres: ");
+            String adres = scanner.nextLine();
+            System.out.print("Nieuw telefoonnummer: ");
+            String telefoonnummer = scanner.nextLine();
 
-        Lid lid = lidService.getLid(id);
-        if (lid != null) {
-            lid.setNaam(naam);
-            lid.setAdres(adres);
-            lid.setTelefoonnummer(telefoonnummer);
-            lidService.updateLid(lid);
-            System.out.println("Lidgegevens bijgewerkt.");
-        } else {
-            System.out.println("Lid niet gevonden.");
+            Lid lid = lidService.getLid(id);
+            if (lid != null) {
+                lid.setNaam(naam);
+                lid.setAdres(adres);
+                lid.setTelefoonnummer(telefoonnummer);
+                lidService.updateLid(lid);
+                System.out.println("Lidgegevens bijgewerkt.");
+            } else {
+                System.out.println("Lid niet gevonden.");
+            }
+        } catch (Exception e) {
+            System.out.println("Er is een fout opgetreden: " + e.getMessage());
         }
     }
 
     private static void verwijderLid() {
-        System.out.print("Lid ID: ");
-        int id = scanner.nextInt();
-        Lid lid = lidService.getLid(id);
-        if (lid != null) {
-            lidService.deleteLid(id);
-            System.out.println("Lid verwijderd.");
-        } else {
-            System.out.println("Lid niet gevonden.");
+        try {
+            System.out.print("Lid ID: ");
+            int id = Integer.parseInt(scanner.nextLine());
+
+            Lid lid = lidService.getLid(id);
+            if (lid != null) {
+                lidService.deleteLid(id);
+                System.out.println("Lid verwijderd.");
+            } else {
+                System.out.println("Lid niet gevonden.");
+            }
+        } catch (Exception e) {
+            System.out.println("Er is een fout opgetreden: " + e.getMessage());
         }
     }
 
     private static void zoekLid() {
-        System.out.print("Lid ID: ");
-        int id = scanner.nextInt();
-        Lid lid = lidService.getLid(id);
-        if (lid != null) {
-            System.out.println("Lid gevonden: " + lid.getNaam() + ", " + lid.getAdres() + ", " + lid.getTelefoonnummer());
-        } else {
-            System.out.println("Lid niet gevonden.");
+        try {
+            System.out.print("Lid ID: ");
+            int id = Integer.parseInt(scanner.nextLine());
+            Lid lid = lidService.getLid(id);
+            if (lid != null) {
+                System.out.println("Lid gevonden: " + lid.getNaam() + ", " + lid.getAdres() + ", " + lid.getTelefoonnummer());
+            } else {
+                System.out.println("Lid niet gevonden.");
+            }
+        } catch (Exception e) {
+            System.out.println("Er is een fout opgetreden: " + e.getMessage());
         }
     }
 
