@@ -234,30 +234,38 @@ public class BibliotheekApp {
         System.out.print("Genre: ");
         String genre = scanner.nextLine();
 
-
-// Toon beschikbare categorieën
+        // Toon beschikbare categorieën
         List<Categorie> alleCategorieen = categorieDAO.getAllCategorieen();
         for (Categorie c : alleCategorieen) {
             System.out.println("Categorie ID: " + c.getId() + ", Naam: " + c.getNaam());
         }
 
-// Laat de gebruiker categorieën kiezen
+        // Laat de gebruiker categorieën kiezen
         System.out.print("Selecteer categorieën (IDs gescheiden door komma's): ");
         String[] gekozenCategorieIds = scanner.nextLine().split(",");
         Set<Categorie> geselecteerdeCategorieen = new HashSet<>();
         for (String idString : gekozenCategorieIds) {
-            int id = Integer.parseInt(idString.trim());
-            Categorie categorie = categorieDAO.getCategorie(id);
-            if (categorie != null) {
-                geselecteerdeCategorieen.add(categorie);
-            } else {
-                System.out.println("Categorie met ID " + id + " bestaat niet.");
+            try {
+                int id = Integer.parseInt(idString.trim());
+                Categorie categorie = categorieDAO.getCategorie(id);
+                if (categorie != null) {
+                    geselecteerdeCategorieen.add(categorie);
+                } else {
+                    System.out.println("Categorie met ID " + id + " bestaat niet.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Ongeldige invoer voor categorie ID: " + idString);
             }
         }
 
         System.out.print("Aantal exemplaren: ");
-        int aantal = scanner.nextInt();
-        scanner.nextLine(); // Consume the leftover newline
+        int aantal;
+        try {
+            aantal = Integer.parseInt(scanner.nextLine());
+        } catch (NumberFormatException e) {
+            System.out.println("Ongeldige invoer voor aantal. Standaardwaarde 0 wordt gebruikt.");
+            aantal = 0;
+        }
 
         Boek nieuwBoek = new Boek(titel, auteur, genre, aantal);
         nieuwBoek.setCategorieen(geselecteerdeCategorieen);
@@ -273,56 +281,84 @@ public class BibliotheekApp {
 
 
 
+
     private static void updateBoek() {
         System.out.print("Boek ID: ");
-        int id = scanner.nextInt();
-        scanner.nextLine(); // Consume the leftover newline
+        int id = Integer.parseInt(scanner.nextLine());
+
         System.out.print("Nieuwe titel: ");
         String titel = scanner.nextLine();
         System.out.print("Nieuwe auteur: ");
         String auteur = scanner.nextLine();
+
+
         System.out.print("Nieuw genre: ");
         String genre = scanner.nextLine();
-        System.out.print("Nieuw aantal exemplaren: ");
-        int aantal = scanner.nextInt(); // Vraag naar het nieuwe aantal
 
-        Boek boek = new Boek(titel, auteur, genre, aantal);
-        boek.setId(id);
-        boekService.updateBoek(boek);
+        System.out.print("Nieuw aantal exemplaren: ");
+        int aantal;
+        try {
+            aantal = Integer.parseInt(scanner.nextLine());
+        } catch (NumberFormatException e) {
+            System.out.println("Ongeldige invoer voor aantal. Standaardwaarde 0 wordt gebruikt.");
+            aantal = 0;
+        }
+
+        Boek boek = boekService.getBoek(id);
+        if (boek != null) {
+            boek.setTitel(titel);
+            boek.setAuteur(auteur);
+            boek.setGenre(genre);
+            boek.setAantal(aantal);
+            boekService.updateBoek(boek);
+            System.out.println("Boekgegevens bijgewerkt.");
+        } else {
+            System.out.println("Boek niet gevonden.");
+        }
     }
 
 
 
     private static void verwijderBoek() {
         System.out.print("Boek ID: ");
-        int id = scanner.nextInt();
-        boekService.deleteBoek(id); // Gebruik boekService in plaats van boekDAO
+        int id;
+        try {
+            id = Integer.parseInt(scanner.nextLine());
+            boekService.deleteBoek(id);
+            System.out.println("Boek verwijderd.");
+        } catch (NumberFormatException e) {
+            System.out.println("Ongeldige invoer. Voer alstublieft een geldig boek ID in.");
+        }
     }
 
 
     private static void zoekBoek() {
-        try{
         System.out.print("Boek ID: ");
-        int id = scanner.nextInt();
-        Boek boek = boekService.getBoek(id);
-        if (boek != null) {
-            BoekDetails boekDetails = boekDetailsDAO.getBoekDetails(boek.getId());
-            System.out.println("Boek gevonden: " + boek.getTitel() + ", " + boek.getAuteur() + ", " + boek.getGenre());
-            if (boekDetails != null) {
-                System.out.println("Beschrijving: " + boekDetails.getBeschrijving());
+        int id;
+        try {
+            id = Integer.parseInt(scanner.nextLine());
+            Boek boek = boekService.getBoek(id);
+            if (boek != null) {
+                BoekDetails boekDetails = boekDetailsDAO.getBoekDetails(boek.getId());
+                System.out.println("Boek gevonden: " + boek.getTitel() + ", " + boek.getAuteur() + ", " + boek.getGenre());
+                if (boekDetails != null) {
+                    System.out.println("Beschrijving: " + boekDetails.getBeschrijving());
+                } else {
+                    System.out.println("Geen details beschikbaar voor dit boek.");
+                }
             } else {
-                System.out.println("Geen details beschikbaar voor dit boek.");
+                System.out.println("Boek niet gevonden.");
             }
-        } else {
-            System.out.println("Boek niet gevonden.");
-        }
+        } catch (NumberFormatException e) {
+            System.out.println("Ongeldige invoer voor Boek ID.");
         } catch (Exception e) {
             System.out.println("Er is een fout opgetreden: " + e.getMessage());
         }
     }
 
 
-    private static void beheerUitleningen() {
+
+                private static void beheerUitleningen() {
         while (true) {
             try {
                 System.out.println("\nUitleningen Beheer:");
@@ -355,51 +391,61 @@ public class BibliotheekApp {
 
 
     private static void leenBoekUit() {
-        System.out.print("Lid ID: ");
-        int lidId = scanner.nextInt();
-        System.out.print("Boek ID: ");
-        int boekId = scanner.nextInt();
+        int lidId, boekId;
+        try {
+            System.out.print("Lid ID: ");
+            lidId = Integer.parseInt(scanner.nextLine());
+            System.out.print("Boek ID: ");
+            boekId = Integer.parseInt(scanner.nextLine());
+        } catch (NumberFormatException e) {
+            System.out.println("Ongeldige invoer. Voer alstublieft geldige nummers in.");
+            return;
+        }
 
         Lid lid = lidService.getLid(lidId);
         Boek boek = boekService.getBoek(boekId);
 
-        if (lid != null && boek != null && boekService.isBoekBeschikbaar(boekId)) {
+        if (lid != null && boek != null && boekService.isBoekBeschikbaar(boekId) && boek.getAantal() > 0) {
+            boek.setAantal(boek.getAantal() - 1);
+            boekService.updateBoek(boek);
+
             Uitlening nieuweUitlening = new Uitlening(lid, boek, new Date());
             uitleningService.addUitlening(nieuweUitlening);
             System.out.println("Boek uitgeleend.");
         } else {
             System.out.println("Boek of lid niet gevonden, of boek is niet beschikbaar.");
         }
-
-        if (boek != null && boek.getAantal() > 0) {
-            // Verminder de voorraad
-            boek.setAantal(boek.getAantal() - 1);
-            boekService.updateBoek(boek);
-
-            // Creëer en sla de uitlening op
-            Uitlening nieuweUitlening = new Uitlening(lid, boek, new Date());
-            uitleningService.addUitlening(nieuweUitlening);
-            System.out.println("Boek uitgeleend.");
-        } else {
-            System.out.println("Boek is niet beschikbaar.");
-        }
     }
 
 
+
     private static void brengBoekTerug() {
-        System.out.print("Uitlening ID: ");
-        int uitleningId = scanner.nextInt();
+        int uitleningId;
+        try {
+            System.out.print("Uitlening ID: ");
+            uitleningId = Integer.parseInt(scanner.nextLine());
+        } catch (NumberFormatException e) {
+            System.out.println("Ongeldige invoer. Voer een geldig uitlening ID in.");
+            return;
+        }
+
         Uitlening uitlening = uitleningService.getUitlening(uitleningId);
         if (uitlening != null) {
             uitlening.setTeruggebrachtOp(new Date());
             uitleningService.updateUitlening(uitlening);
             System.out.println("Boek teruggebracht.");
+
+            // Verhoog de voorraad van het boek
+            Boek boek = uitlening.getBoek();
+            boek.setAantal(boek.getAantal() + 1);
+            boekService.updateBoek(boek);
         } else {
             System.out.println("Uitlening niet gevonden.");
         }
     }
 
-    private static void genereerRapporten() {
+
+            private static void genereerRapporten() {
         while (true) {
             try {
                 System.out.println("\nRapporten Genereren:");
@@ -440,7 +486,10 @@ public class BibliotheekApp {
                         ", Uitgeleend op: " + u.getUitgeleendOp());
             }
         }
+        // Terug naar hoofdmenu
+        return;
     }
+
 
 
     private static void genereerLateRetourenRapport() {
@@ -458,6 +507,8 @@ public class BibliotheekApp {
                 }
             }
         }
+// Terug naar hoofdmenu
+        return;
     }
 
 
@@ -508,11 +559,15 @@ public class BibliotheekApp {
 
 
     private static void voegCategorieToe(CategorieDAO categorieDAO) {
-        System.out.print("Naam van de categorie: ");
-        String naam = scanner.nextLine();
-        Categorie categorie = new Categorie(naam);
-        categorieDAO.saveCategorie(categorie);
-        System.out.println("Categorie toegevoegd.");
+        try {
+            System.out.print("Naam van de categorie: ");
+            String naam = scanner.nextLine();
+            Categorie categorie = new Categorie(naam);
+            categorieDAO.saveCategorie(categorie);
+            System.out.println("Categorie toegevoegd.");
+        } catch (Exception e) {
+            System.out.println("Er is een fout opgetreden: " + e.getMessage());
+        }
     }
 
     private static void toonCategorieen(CategorieDAO categorieDAO) {
@@ -523,37 +578,51 @@ public class BibliotheekApp {
     }
 
     private static void updateCategorie(CategorieDAO categorieDAO) {
-        System.out.print("Categorie ID: ");
-        int id = scanner.nextInt();
-        scanner.nextLine(); // Consume newline left-over
-        System.out.print("Nieuwe naam voor categorie: ");
-        String naam = scanner.nextLine();
+        try {
+            System.out.print("Categorie ID: ");
+            int id = Integer.parseInt(scanner.nextLine());
+            System.out.print("Nieuwe naam voor categorie: ");
+            String naam = scanner.nextLine();
 
-        Categorie categorie = new Categorie(naam);
-        categorie.setId(id);
-        categorieDAO.updateCategorie(categorie);
-        System.out.println("Categorie bijgewerkt.");
-    }
-
-    private static void verwijderCategorie(CategorieDAO categorieDAO) {
-        System.out.print("Categorie ID: ");
-        int id = scanner.nextInt();
-        categorieDAO.deleteCategorie(id);
-        System.out.println("Categorie verwijderd.");
-    }
-
-    private static void zoekCategorie() {
-        System.out.print("Voer Categorie ID in: ");
-        int id = scanner.nextInt();
-        CategorieDAO categorieDAO = new CategorieDAO(emf);
-        Categorie categorie = categorieDAO.getCategorie(id);
-
-        if (categorie != null) {
-            System.out.println("Categorie gevonden: ID = " + categorie.getId() + ", Naam = " + categorie.getNaam());
-        } else {
-            System.out.println("Geen categorie gevonden met ID " + id);
+            Categorie categorie = new Categorie(naam);
+            categorie.setId(id);
+            categorieDAO.updateCategorie(categorie);
+            System.out.println("Categorie bijgewerkt.");
+        } catch (NumberFormatException e) {
+            System.out.println("Voer alstublieft een geldig nummer in.");
+        } catch (Exception e) {
+            System.out.println("Er is een fout opgetreden: " + e.getMessage());
         }
     }
 
-}
+    private static void verwijderCategorie(CategorieDAO categorieDAO) {
+        try {
+            System.out.print("Categorie ID: ");
+            int id = Integer.parseInt(scanner.nextLine());
+            categorieDAO.deleteCategorie(id);
+            System.out.println("Categorie verwijderd.");
+        } catch (NumberFormatException e) {
+            System.out.println("Voer alstublieft een geldig nummer in.");
+        } catch (Exception e) {
+            System.out.println("Er is een fout opgetreden: " + e.getMessage());
+        }
+    }
 
+    private static void zoekCategorie() {
+        try {
+            System.out.print("Voer Categorie ID in: ");
+            int id = Integer.parseInt(scanner.nextLine());
+            Categorie categorie = categorieDAO.getCategorie(id);
+            if (categorie != null) {
+                System.out.println("Categorie gevonden: ID = " + categorie.getId() + ", Naam = " + categorie.getNaam());
+            } else {
+                System.out.println("Geen categorie gevonden met ID " + id);
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Voer alstublieft een geldig nummer in.");
+        } catch (Exception e) {
+            System.out.println("Er is een fout opgetreden: " + e.getMessage());
+        }
+
+    }
+}
