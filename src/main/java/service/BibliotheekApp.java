@@ -210,8 +210,6 @@ public class BibliotheekApp {
 
     private static void voegBoekToe() {
         System.out.print("Titel: ");
-        scanner.nextLine(); // Consume the leftover newline
-
         String titel = scanner.nextLine();
         System.out.print("Auteur: ");
         String auteur = scanner.nextLine();
