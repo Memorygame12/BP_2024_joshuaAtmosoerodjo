@@ -1,0 +1,56 @@
+
+CREATE DATABASE `beroepsproduct` /*!40100 DEFAULT CHARACTER SET latin1 */;
+
+CREATE TABLE `boek_categorie` (
+  `categorie_id` int(11) NOT NULL,
+  `boek_id` int(11) NOT NULL,
+  PRIMARY KEY (`categorie_id`,`boek_id`),
+  KEY `FKi1j1utqblegjmqnwajutc67m5` (`boek_id`),
+  CONSTRAINT `FK73vskbulapa8xi3a60t5kkfk3` FOREIGN KEY (`categorie_id`) REFERENCES `categorieen` (`id`),
+  CONSTRAINT `FKi1j1utqblegjmqnwajutc67m5` FOREIGN KEY (`boek_id`) REFERENCES `boeken` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `boek_details` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `beschrijving` varchar(255) DEFAULT NULL,
+  `boek_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `UK_88ddm7r3blkcn2nnwr0jqe8i0` (`boek_id`),
+  CONSTRAINT `FKkhv26xdtyk5yiqtjuxf277n19` FOREIGN KEY (`boek_id`) REFERENCES `boeken` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+
+CREATE TABLE `boeken` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `aantal` int(11) DEFAULT NULL,
+  `auteur` varchar(255) DEFAULT NULL,
+  `genre` varchar(255) DEFAULT NULL,
+  `titel` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+
+CREATE TABLE `categorieen` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `naam` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `leden` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `adres` varchar(255) DEFAULT NULL,
+  `naam` varchar(255) DEFAULT NULL,
+  `telefoonnummer` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+
+CREATE TABLE `uitleningen` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `teruggebracht_op` date DEFAULT NULL,
+  `uitgeleend_op` date DEFAULT NULL,
+  `boek_id` int(11) DEFAULT NULL,
+  `lid_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FKrxqsk8e5cb87yne2bi1529xdp` (`boek_id`),
+  KEY `FKmh0pvnhefn8nrv1v6p66t78k3` (`lid_id`),
+  CONSTRAINT `FKmh0pvnhefn8nrv1v6p66t78k3` FOREIGN KEY (`lid_id`) REFERENCES `leden` (`id`),
+  CONSTRAINT `FKrxqsk8e5cb87yne2bi1529xdp` FOREIGN KEY (`boek_id`) REFERENCES `boeken` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
