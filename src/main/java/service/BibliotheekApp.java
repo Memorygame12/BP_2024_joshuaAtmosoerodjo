@@ -445,13 +445,14 @@ public class BibliotheekApp {
     }
 
 
-            private static void genereerRapporten() {
+    private static void genereerRapporten() {
         while (true) {
             try {
                 System.out.println("\nRapporten Genereren:");
                 System.out.println("1. Rapport van uitgeleende boeken");
                 System.out.println("2. Rapport van late retouren");
-                System.out.println("3. Terug naar hoofdmenu");
+                System.out.println("3. Rapport van BoekenRapport");
+                System.out.println("4. Terug naar hoofdmenu");
 
                 System.out.print("Kies een optie: ");
                 int keuze = Integer.parseInt(scanner.nextLine());
@@ -464,6 +465,9 @@ public class BibliotheekApp {
                         genereerLateRetourenRapport();
                         break;
                     case 3:
+                        genereerBoekenRapport();
+                        break;
+                    case 4:
                         return;
                     default:
                         System.out.println("Ongeldige keuze, probeer opnieuw.");
@@ -509,6 +513,21 @@ public class BibliotheekApp {
         }
 // Terug naar hoofdmenu
         return;
+    }
+
+    private static void genereerBoekenRapport() {
+        List<Boek> alleBoeken = boekService.getAllBoeken();
+        if (alleBoeken.isEmpty()) {
+            System.out.println("Er zijn momenteel geen boeken in de bibliotheek.");
+        } else {
+            System.out.println("\nAlle Boeken in de Bibliotheek:");
+            for (Boek boek : alleBoeken) {
+                System.out.println("ID: " + boek.getId() + ", Titel: " + boek.getTitel() +
+                        ", Auteur: " + boek.getAuteur() + ", Genre: " + boek.getGenre() +
+                        ", Aantal: " + boek.getAantal());
+                // Hier kan je meer informatie toevoegen indien nodig
+            }
+        }
     }
 
 
