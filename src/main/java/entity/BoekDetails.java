@@ -8,7 +8,7 @@ public class BoekDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private int boekDetails_id;
 
     @Column(name = "beschrijving")
     private String beschrijving;
@@ -29,11 +29,11 @@ public class BoekDetails {
 
     // Getters en setters
     public int getId() {
-        return id;
+        return boekDetails_id;
     }
 
     public void setId(int id) {
-        this.id = id;
+        this.boekDetails_id = id;
     }
 
     public String getBeschrijving() {

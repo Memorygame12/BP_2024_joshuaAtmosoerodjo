@@ -18,7 +18,7 @@ public class Uitlening {
     }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private int Uitlening_id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "lid_id")
@@ -36,8 +36,8 @@ public class Uitlening {
     @Temporal(TemporalType.DATE)
     private Date teruggebrachtOp;
 
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    public int getId() { return Uitlening_id; }
+    public void setId(int id) { this.Uitlening_id = id; }
     public Lid getLid() { return lid; }
     public void setLid(Lid lid) { this.lid = lid; }
     public Boek getBoek() { return boek; }

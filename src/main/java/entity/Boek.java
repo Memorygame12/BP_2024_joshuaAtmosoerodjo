@@ -21,7 +21,7 @@ public class Boek {
     }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private int boek_id;
 
     @Column(name = "titel")
     private String titel;
@@ -40,8 +40,8 @@ public class Boek {
 //    @ManyToMany(mappedBy = "boeken", cascade =  CascadeType.PERSIST, fetch = FetchType.EAGER )
 //    private Set<Categorie> categorieen;
 
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    public int getId() { return boek_id; }
+    public void setId(int id) { this.boek_id = id; }
     public String getTitel() { return titel; }
     public void setTitel(String titel) { this.titel = titel; }
     public String getAuteur() { return auteur; }

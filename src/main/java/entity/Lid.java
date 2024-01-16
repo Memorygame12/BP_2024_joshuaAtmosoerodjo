@@ -21,7 +21,7 @@ public class Lid {
     }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private int lid_id;
 
     @Column(name = "naam")
     private String naam;
@@ -35,8 +35,8 @@ public class Lid {
     @OneToMany(mappedBy = "lid", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Uitlening> uitleningen;
 
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    public int getId() { return lid_id; }
+    public void setId(int id) { this.lid_id = id; }
     public String getNaam() { return naam; }
     public void setNaam(String naam) { this.naam = naam; }
     public String getAdres() { return adres; }

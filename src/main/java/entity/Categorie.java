@@ -19,7 +19,7 @@ public class Categorie {
     }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private int categorie_id;
 
     @Column(name = "naam")
     private String naam;
@@ -37,8 +37,8 @@ public class Categorie {
     @ManyToMany(cascade = { CascadeType.ALL })
     @JoinTable(
             name = "boek_categorie",
-            joinColumns = { @JoinColumn(name = "categorie_id", referencedColumnName = "id") },
-            inverseJoinColumns = { @JoinColumn(name = "boek_id", referencedColumnName = "id") }
+            joinColumns = { @JoinColumn(name = "categorie_id") },
+            inverseJoinColumns = { @JoinColumn(name = "boek_id") }
     )
     Set<Boek> boeken = new HashSet<>();
 
@@ -53,8 +53,8 @@ public class Categorie {
 //    private Set<Boek> boeken;
 
     // Getters en setters
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    public int getId() { return categorie_id; }
+    public void setId(int id) { this.categorie_id = id; }
     public String getNaam() { return naam; }
     public void setNaam(String naam) { this.naam = naam; }
     public Set<Boek> getBoeken() { return boeken; }
