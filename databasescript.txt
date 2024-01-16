@@ -23,7 +23,6 @@ CREATE TABLE `boeken` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `aantal` int(11) DEFAULT NULL,
   `auteur` varchar(255) DEFAULT NULL,
-  `genre` varchar(255) DEFAULT NULL,
   `titel` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
