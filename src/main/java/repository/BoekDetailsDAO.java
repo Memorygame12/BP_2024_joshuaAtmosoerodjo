@@ -16,13 +16,13 @@ public class BoekDetailsDAO {
         em.getTransaction().begin();
         em.persist(boekDetails);
         em.getTransaction().commit();
-        em.close();
+
     }
 
     public BoekDetails getBoekDetails(int id) {
         EntityManager em = emf.createEntityManager();
         BoekDetails boekDetails = em.find(BoekDetails.class, id);
-        em.close();
+
         return boekDetails;
     }
 
@@ -31,7 +31,7 @@ public class BoekDetailsDAO {
         em.getTransaction().begin();
         em.merge(boekDetails);
         em.getTransaction().commit();
-        em.close();
+
     }
 
     public void deleteBoekDetails(int id) {
@@ -42,6 +42,6 @@ public class BoekDetailsDAO {
             em.remove(boekDetails);
         }
         em.getTransaction().commit();
-        em.close();
+
     }
 }

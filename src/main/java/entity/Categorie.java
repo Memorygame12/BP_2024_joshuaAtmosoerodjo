@@ -1,6 +1,9 @@
 package entity;
 
+
 import jakarta.persistence.*;
+
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -29,13 +32,25 @@ public class Categorie {
 //    )
 //    private Set<Boek> boeken;
 
-    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+
+
+    @ManyToMany(cascade = { CascadeType.ALL })
     @JoinTable(
             name = "boek_categorie",
-            joinColumns = @JoinColumn(name = "categorie_id"),
-            inverseJoinColumns = @JoinColumn(name = "boek_id")
+            joinColumns = { @JoinColumn(name = "categorie_id", referencedColumnName = "id") },
+            inverseJoinColumns = { @JoinColumn(name = "boek_id", referencedColumnName = "id") }
     )
-    private Set<Boek> boeken;
+    Set<Boek> boeken = new HashSet<>();
+
+
+
+//    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+//    @JoinTable(
+//            name = "boek_categorie",
+//            joinColumns = @JoinColumn(name = "categorie_id"),
+//            inverseJoinColumns = @JoinColumn(name = "boek_id")
+//    )
+//    private Set<Boek> boeken;
 
     // Getters en setters
     public int getId() { return id; }

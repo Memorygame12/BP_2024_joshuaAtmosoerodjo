@@ -18,13 +18,13 @@ public class CategorieDAO {
         em.getTransaction().begin();
         em.persist(categorie);
         em.getTransaction().commit();
-        em.close();
+
     }
 
     public Categorie getCategorie(int id) {
         EntityManager em = emf.createEntityManager();
         Categorie categorie = em.find(Categorie.class, id);
-        em.close();
+
         return categorie;
     }
 
@@ -33,7 +33,7 @@ public class CategorieDAO {
         em.getTransaction().begin();
         em.merge(categorie);
         em.getTransaction().commit();
-        em.close();
+
     }
 
     public void deleteCategorie(int id
@@ -45,13 +45,15 @@ public class CategorieDAO {
             em.remove(categorie);
         }
         em.getTransaction().commit();
-        em.close();
+
     }
 
     public List<Categorie> getAllCategorieen() {
         EntityManager em = emf.createEntityManager();
         List<Categorie> categorieen = em.createQuery("SELECT c FROM Categorie c", Categorie.class).getResultList();
-        em.close();
+
         return categorieen;
     }
+
+
 }
