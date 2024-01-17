@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
+import static jakarta.persistence.CascadeType.ALL;
+
 @Entity
 @Table(name = "boeken")
 
@@ -32,11 +34,26 @@ public class Boek {
     @Column(name = "aantal")
     private int aantal;
 
-    @ManyToMany(mappedBy = "boeken")
-    private Set<Categorie> categorieen = new HashSet<>();
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @JoinTable(name = "boek_categorie", joinColumns = @JoinColumn(name = "boek_id"),
+            inverseJoinColumns = @JoinColumn(name = "categorie_id"))
+    private Set<Categorie> categorien;
 
-//    private Set<Categorie> categorieen;
+    public int getBoek_id() {
+        return boek_id;
+    }
 
+    public void setBoek_id(int boek_id) {
+        this.boek_id = boek_id;
+    }
+
+    public Set<Categorie> getCategorien() {
+        return categorien;
+    }
+
+    public void setCategorien(Set<Categorie> categorien) {
+        this.categorien = categorien;
+    }
 //    @ManyToMany(mappedBy = "boeken", cascade =  CascadeType.PERSIST, fetch = FetchType.EAGER )
 //    private Set<Categorie> categorieen;
 
@@ -46,8 +63,8 @@ public class Boek {
     public void setTitel(String titel) { this.titel = titel; }
     public String getAuteur() { return auteur; }
     public void setAuteur(String auteur) { this.auteur = auteur; }
-    public Set<Categorie> getCategorieen() { return categorieen; }
-    public void setCategorieen(Set<Categorie> categorieen) { this.categorieen = categorieen; }
+//    public Set<Categorie> getCategorieen() { return categorieen; }
+//    public void setCategorieen(Set<Categorie> categorieen) { this.categorieen = categorieen; }
     public int getAantal() {
         return aantal;
     }

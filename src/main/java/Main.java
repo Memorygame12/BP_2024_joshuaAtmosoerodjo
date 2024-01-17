@@ -61,6 +61,7 @@ public class Main {
             } catch (NumberFormatException e) {
                 System.out.println("Voer alstublieft een geldig nummer in.");
             } catch (Exception e) {
+                e.printStackTrace();
                 System.out.println("Er is een fout opgetreden: " + e.getMessage());
             }
         }
@@ -124,6 +125,7 @@ public class Main {
             Lid nieuwLid = new Lid(naam, adres, telefoonnummer);
             lidService.addLid(nieuwLid);
         } catch (Exception e) {
+            e.printStackTrace();
             System.out.println("Er is een fout opgetreden: " + e.getMessage());
         }
     }
@@ -151,6 +153,7 @@ public class Main {
                 System.out.println("Lid niet gevonden.");
             }
         } catch (Exception e) {
+            e.printStackTrace();
             System.out.println("Er is een fout opgetreden: " + e.getMessage());
         }
     }
@@ -168,6 +171,7 @@ public class Main {
                 System.out.println("Lid niet gevonden.");
             }
         } catch (Exception e) {
+            e.printStackTrace();
             System.out.println("Er is een fout opgetreden: " + e.getMessage());
         }
     }
@@ -183,6 +187,7 @@ public class Main {
                 System.out.println("Lid niet gevonden.");
             }
         } catch (Exception e) {
+            e.printStackTrace();
             System.out.println("Er is een fout opgetreden: " + e.getMessage());
         }
     }
@@ -221,6 +226,7 @@ public class Main {
             } catch (NumberFormatException e) {
                 System.out.println("Voer alstublieft een geldig nummer in.");
             } catch (Exception e) {
+                e.printStackTrace();
                 System.out.println("Er is een fout opgetreden: " + e.getMessage());
             }
         }
@@ -237,7 +243,7 @@ public class Main {
         // Toon beschikbare categorieën
         List<Categorie> alleCategorieen = categorieDAO.getAllCategorieen();
         for (Categorie c : alleCategorieen) {
-            System.out.println("Categorie ID: " + c.getId() + ", Naam: " + c.getNaam());
+            System.out.println("Categorie ID: " + c.getCategorie_id() + ", Naam: " + c.getNaam());
         }
 
         // Laat de gebruiker categorieën kiezen
@@ -268,7 +274,7 @@ public class Main {
         }
 
         Boek nieuwBoek = new Boek(titel, auteur, aantal);
-        nieuwBoek.setCategorieen(geselecteerdeCategorieen);
+        nieuwBoek.setCategorien(geselecteerdeCategorieen);
         boekService.addBoek(nieuwBoek);
 
         System.out.print("Beschrijving: ");
@@ -299,11 +305,30 @@ public class Main {
             aantal = 0;
         }
 
+        System.out.print("Selecteer categorieën (IDs gescheiden door komma's): ");
+        String[] gekozenCategorieIds = scanner.nextLine().split(",");
+        Set<Categorie> geselecteerdeCategorieen = new HashSet<>();
+        for (String idString : gekozenCategorieIds) {
+            try {
+                int idCat = Integer.parseInt(idString.trim());
+                Categorie categorie = categorieDAO.getCategorie(idCat);
+                if (categorie != null) {
+                    geselecteerdeCategorieen.add(categorie);
+                } else {
+                    System.out.println("Categorie met ID " + idCat + " bestaat niet.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Ongeldige invoer voor categorie ID: " + idString);
+            }
+        }
+
+
         Boek boek = boekService.getBoek(id);
         if (boek != null) {
             boek.setTitel(titel);
             boek.setAuteur(auteur);
             boek.setAantal(aantal);
+            boek.setCategorien(geselecteerdeCategorieen);
             boekService.updateBoek(boek);
             System.out.println("Boekgegevens bijgewerkt.");
         } else {
@@ -346,6 +371,7 @@ public class Main {
         } catch (NumberFormatException e) {
             System.out.println("Ongeldige invoer voor Boek ID.");
         } catch (Exception e) {
+            e.printStackTrace();
             System.out.println("Er is een fout opgetreden: " + e.getMessage());
         }
     }
@@ -378,6 +404,7 @@ public class Main {
             } catch (NumberFormatException e) {
                 System.out.println("Voer alstublieft een geldig nummer in.");
             } catch (Exception e) {
+                e.printStackTrace();
                 System.out.println("Er is een fout opgetreden: " + e.getMessage());
             }
         }
@@ -469,11 +496,11 @@ public class Main {
             } catch (NumberFormatException e) {
                 System.out.println("Voer alstublieft een geldig nummer in.");
             } catch (Exception e) {
+                e.printStackTrace();
                 System.out.println("Er is een fout opgetreden: " + e.getMessage());
             }
         }
     }
-
 
     private static void genereerUitgeleendeBoekenRapport() {
         List<Uitlening> uitleningen = uitleningService.getAllUitleningen();
@@ -565,6 +592,7 @@ public class Main {
             } catch (NumberFormatException e) {
                 System.out.println("Voer alstublieft een geldig nummer in.");
             } catch (Exception e) {
+                e.printStackTrace();
                 System.out.println("Er is een fout opgetreden: " + e.getMessage());
             }
         }
@@ -579,6 +607,7 @@ public class Main {
             categorieDAO.saveCategorie(categorie);
             System.out.println("Categorie toegevoegd.");
         } catch (Exception e) {
+            e.printStackTrace();
             System.out.println("Er is een fout opgetreden: " + e.getMessage());
         }
     }
@@ -586,7 +615,7 @@ public class Main {
     private static void toonCategorieen(CategorieDAO categorieDAO) {
         List<Categorie> categorieen = categorieDAO.getAllCategorieen();
         for (Categorie c : categorieen) {
-            System.out.println("ID: " + c.getId() + ", Naam: " + c.getNaam());
+            System.out.println("ID: " + c.getCategorie_id() + ", Naam: " + c.getNaam());
         }
     }
 
@@ -598,12 +627,13 @@ public class Main {
             String naam = scanner.nextLine();
 
             Categorie categorie = new Categorie(naam);
-            categorie.setId(id);
+            categorie.setCategorie_id(id);
             categorieDAO.updateCategorie(categorie);
             System.out.println("Categorie bijgewerkt.");
         } catch (NumberFormatException e) {
             System.out.println("Voer alstublieft een geldig nummer in.");
         } catch (Exception e) {
+            e.printStackTrace();
             System.out.println("Er is een fout opgetreden: " + e.getMessage());
         }
     }
@@ -617,6 +647,7 @@ public class Main {
         } catch (NumberFormatException e) {
             System.out.println("Voer alstublieft een geldig nummer in.");
         } catch (Exception e) {
+            e.printStackTrace();
             System.out.println("Er is een fout opgetreden: " + e.getMessage());
         }
     }
@@ -627,13 +658,14 @@ public class Main {
             int id = Integer.parseInt(scanner.nextLine());
             Categorie categorie = categorieDAO.getCategorie(id);
             if (categorie != null) {
-                System.out.println("Categorie gevonden: ID = " + categorie.getId() + ", Naam = " + categorie.getNaam());
+                System.out.println("Categorie gevonden: ID = " + categorie.getCategorie_id() + ", Naam = " + categorie.getNaam());
             } else {
                 System.out.println("Geen categorie gevonden met ID " + id);
             }
         } catch (NumberFormatException e) {
             System.out.println("Voer alstublieft een geldig nummer in.");
         } catch (Exception e) {
+            e.printStackTrace();
             System.out.println("Er is een fout opgetreden: " + e.getMessage());
         }
 
